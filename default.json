@@ -1,32 +1,108 @@
+// Shared Renovate defaults for ivy/* repositories. README.md states the rule
+// these serve: if a repository's checks pass, the update merges.
+//
+// Renovate parses this file as JSONC, so comments are allowed. It must keep the
+// name default.json: that is the only file `github>ivy/renovate-config` loads.
+// Options: https://docs.renovatebot.com/configuration-options/
 {
+  // Editor validation and completion.
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  // Names this preset in Renovate's resolved config and logs.
   "description": "Shared defaults: if a repository's checks pass, the update merges.",
+
   "extends": [
+    // Renovate's maintained baseline: monorepo grouping, package replacements,
+    // known workarounds, and changelog links in pull requests.
+    // https://docs.renovatebot.com/presets-config/#configrecommended
     "config:recommended",
+    // Conventional-commit prefixes on every repository. The default, "auto",
+    // guesses from each repository's history.
+    // https://docs.renovatebot.com/presets-default/#semanticcommits
     ":semanticCommits",
+    // config:recommended opens a dashboard issue in every repository. A
+    // repository that wants to see updates the cooldown is holding turns it
+    // back on with `"dependencyDashboard": true`.
+    // https://docs.renovatebot.com/key-concepts/dashboard/
     ":disableDependencyDashboard"
   ],
+
+  // Schedules that repositories set, such as "on monday", are read in the
+  // owner's local time.
+  // https://docs.renovatebot.com/configuration-options/#timezone
   "timezone": "America/Los_Angeles",
+
+  // Renovate runs as a GitHub App (ivy/renovate-runner), so committing through
+  // the API gets its commits signed and verified by GitHub. "auto" does the
+  // same under an App; this keeps it from depending on how Renovate is run.
+  // https://docs.renovatebot.com/configuration-options/#platformcommit
   "platformCommit": "enabled",
+
+  // Opens a pull request when a repository's config uses a deprecated option,
+  // so schema changes reach each repository instead of silently going stale.
+  // https://docs.renovatebot.com/configuration-options/#configmigration
   "configMigration": true,
+
+  // The rule in README.md: every update merges once its checks pass.
+  // https://docs.renovatebot.com/configuration-options/#automerge
   "automerge": true,
+  // Merge through a pull request, because that is where repositories run CI. A
+  // branch automerge would push to the base branch without one. Renovate's
+  // default too, stated because automergeStrategy only applies to it.
+  // https://docs.renovatebot.com/configuration-options/#automergetype
   "automergeType": "pr",
+  // One commit per update on the base branch, easy to revert.
+  // https://docs.renovatebot.com/configuration-options/#automergestrategy
   "automergeStrategy": "squash",
+  // No repository has required status checks, so GitHub's native auto-merge
+  // would merge before CI reports. Renovate merges only once every check is
+  // green, and that keeps almanac/trust able to hold a pull request.
+  // https://docs.renovatebot.com/configuration-options/#platformautomerge
   "platformAutomerge": false,
+
+  // Rebase only on conflict. Renovate merges only branches that are up to date,
+  // so rebasing whenever a branch falls behind ("auto" does, with automerge on)
+  // re-runs CI on every open pull request after each merge and pushes each merge
+  // back a Renovate run. The cost: two updates can merge without having been
+  // tested together, which Renovate warns about.
+  // https://docs.renovatebot.com/configuration-options/#rebasewhen
   "rebaseWhen": "conflicted",
+
+  // Marks Renovate's pull requests so they can be filtered.
+  // https://docs.renovatebot.com/configuration-options/#labels
   "labels": ["dependencies"],
+
+  // Propose only releases that have passed the cooldown below, never one still
+  // inside it. Renovate's default, stated because the cooldown depends on it.
+  // https://docs.renovatebot.com/configuration-options/#internalchecksfilter
   "internalChecksFilter": "strict",
+
+  // Vulnerability fixes from osv.dev, for direct dependencies, in addition to
+  // GitHub's alerts.
+  // https://docs.renovatebot.com/configuration-options/#osvvulnerabilityalerts
   "osvVulnerabilityAlerts": true,
+  // https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts
   "vulnerabilityAlerts": {
+    // Almanac acts on pull requests with this label.
     "labels": ["security"],
+    // A fix skips the cooldown: there, waiting is the risk.
+    // docs/research/dependency-cooldowns.md#costs-and-counter-cases
     "minimumReleaseAge": null
   },
+
   "github-actions": {
+    // Pin actions to a commit SHA. A tag can be moved to malicious code and
+    // still look old, which a cooldown cannot catch.
+    // docs/research/dependency-cooldowns.md#costs-and-counter-cases
+    // https://docs.renovatebot.com/configuration-options/#pindigests
     "pinDigests": true
   },
+
   "packageRules": [
     {
-      "description": "Hold a release for three days, so a malicious one can be found and pulled first (docs/research/dependency-cooldowns.md). Only these datasources and update types carry a release timestamp, and one without it would wait for ever.",
+      "description": "Hold a release for three days, so a malicious one can be found and pulled first. Only these datasources and update types carry a release timestamp, and one without it would wait for ever.",
+      // Three days: docs/research/dependency-cooldowns.md
+      // https://docs.renovatebot.com/configuration-options/#minimumreleaseage
       "matchDatasources": ["npm", "go", "github-tags", "github-releases"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "minimumReleaseAge": "3 days"
