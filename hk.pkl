@@ -1,0 +1,49 @@
+amends "package://github.com/jdx/hk/releases/download/v2.11.1/hk@2.11.1#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.11.1/hk@2.11.1#/Builtins.pkl"
+
+// mise.lock pins its lock files by digest, so their bytes must not change.
+local verbatim = List("mise.lock", ".mise/locks/**")
+
+local linters = new Mapping<String, Step | Group> {
+  ["check-merge-conflict"] = (Builtins.check_merge_conflict) {
+    exclude = verbatim
+  }
+  ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
+    exclude = verbatim
+  }
+  ["newlines"] = (Builtins.newlines) {
+    exclude = verbatim
+  }
+  ["actionlint"] = Builtins.actionlint
+  // --strict fails on any warning, including an option a newer Renovate has
+  // deprecated, so a Renovate bump that changes the schema fails here first.
+  // --no-global: a file argument is otherwise checked as self-hosted global
+  // config, and default.json is a preset.
+  ["renovate"] {
+    glob = List("default.json", "renovate.json5")
+    check = "renovate-config-validator --strict --no-global {{files}}"
+  }
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+  ["pre-push"] {
+    steps = linters
+  }
+  ["commit-msg"] {
+    steps {
+      ["check-conventional-commit"] = Builtins.check_conventional_commit
+    }
+  }
+  ["check"] {
+    steps = linters
+  }
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+}

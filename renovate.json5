@@ -1,0 +1,16 @@
+// This repository's own Renovate config. It keeps the validator (npm:renovate
+// in mise.toml) and the Check workflow's actions current, so a Renovate release
+// that changes the config schema fails `hk check` here before it reaches the
+// repositories that extend default.json.
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>ivy/renovate-config"],
+  "enabledManagers": ["mise", "github-actions"],
+  "packageRules": [
+    // mise writes versions without the "v" that GitHub tags carry.
+    {
+      "matchManagers": ["mise"],
+      "extractVersion": "^v?(?<version>.+)$"
+    }
+  ]
+}
