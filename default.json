@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared defaults: if a repository's checks pass, the update merges.",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":disableDependencyDashboard"
+  ],
+  "timezone": "America/Los_Angeles",
+  "platformCommit": "enabled",
+  "configMigration": true,
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "platformAutomerge": false,
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "internalChecksFilter": "strict",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "minimumReleaseAge": null
+  },
+  "github-actions": {
+    "pinDigests": true
+  },
+  "packageRules": [
+    {
+      "description": "Hold a release for a week, so a malicious one can be found and pulled first. Only these datasources and update types carry a release timestamp, and one without it would wait for ever.",
+      "matchDatasources": ["npm", "go", "github-tags", "github-releases"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "minimumReleaseAge": "7 days"
+    }
+  ]
+}
