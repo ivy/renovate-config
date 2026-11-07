@@ -17,7 +17,7 @@ If a repository's checks pass, the update merges, whatever kind of update it is.
 
 - **Automerge everything.** Renovate merges once every check is green.
 - **`platformAutomerge: false`.** No repository has required checks, so GitHub's auto-merge would merge before CI reports. Renovate merging keeps `almanac/trust` able to hold a pull request.
-- **A seven-day cooldown** on major, minor, and patch releases from npm, Go, and GitHub, so a malicious release has time to be found and pulled. Only those carry a release timestamp, so other datasources and digest updates have no cooldown, and a repository that wants one sets it. Vulnerability fixes skip it.
+- **A three-day cooldown** on major, minor, and patch releases from npm, Go, and GitHub, so a malicious release has time to be found and pulled. Most compromised releases are pulled within that time, and a longer wait buys little ([evidence](docs/research/dependency-cooldowns.md)). Only those carry a release timestamp, so other datasources and digest updates have no cooldown, and a repository that wants one sets it. Vulnerability fixes skip it.
 - **Never `ignoreTests` or `internalChecksAsSuccess`.** Either one lets a repository merge with nothing having tested it.
 
 ## Checks
