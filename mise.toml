@@ -3,7 +3,7 @@
 [tools]
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:rhysd/actionlint" = "1.7.12"
-hk = { version = "2.11.1", workflow = "release.yml" }
+hk = { version = "2.12.0", workflow = "release.yml" }
 node = "26.13.1"
 # @yarnpkg/libzip@3.2.2 was published without the provenance 3.2.0 had
 # (https://github.com/yarnpkg/berry/issues/7182); drop the exclusion once
