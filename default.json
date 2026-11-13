@@ -92,11 +92,27 @@
 
   "github-actions": {
     // Pin actions to a commit SHA. A tag can be moved to malicious code and
-    // still look old, which a cooldown cannot catch.
+    // still look old, which a cooldown cannot catch. A workflow onboarded to
+    // .github/workflows/actions.lock keeps its tag refs: the lockfile holds
+    // their commits, and Renovate regenerates it with each update instead.
     // docs/research/dependency-cooldowns.md#costs-and-counter-cases
     // https://docs.renovatebot.com/configuration-options/#pindigests
+    // https://docs.renovatebot.com/modules/manager/github-actions/#github-actions-lockfile-actionslock
     "pinDigests": true
   },
+
+  "customManagers": [
+    {
+      "description": "The gh-actions-lock release a workflow installs to verify .github/workflows/actions.lock",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)\\.github/workflows/[^/]+\\.ya?ml$/"],
+      "matchStrings": [
+        "gh extension install github/gh-actions-lock --pin (?<currentValue>v\\S+)"
+      ],
+      "depNameTemplate": "github/gh-actions-lock",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
 
   "packageRules": [
     {
