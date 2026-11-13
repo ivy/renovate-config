@@ -14,7 +14,7 @@ local linters = new Mapping<String, Step | Group> {
   ["newlines"] = (Builtins.newlines) {
     exclude = verbatim
   }
-  ["actionlint"] = Builtins.actionlint
+  ["jactionlint"] = Builtins.jactionlint
   // --strict fails on any warning, including an option a newer Renovate has
   // deprecated, so a Renovate bump that changes the schema fails here first.
   // --no-global: a file argument is otherwise checked as self-hosted global

@@ -7,6 +7,12 @@ on:
 
 permissions: {}
 
+# A newer push supersedes the run before it; the job only checks, so cancelling
+# it loses nothing.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   hk:
     runs-on: ubuntu-24.04
