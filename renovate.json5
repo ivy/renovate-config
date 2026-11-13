@@ -1,11 +1,14 @@
 // This repository's own Renovate config. It keeps the validator (npm:renovate
-// in mise.toml) and the Check workflow's actions current, so a Renovate release
-// that changes the config schema fails `hk check` here before it reaches the
-// repositories that extend default.json.
+// in mise.toml) current, so a Renovate release that changes the config schema
+// fails `hk check` here before it reaches the repositories that extend
+// default.json. It also keeps the workflows' actions,
+// .github/workflows/actions.lock, and the gh-actions-lock release that the
+// actions-lock workflow installs current.
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>ivy/renovate-config"],
-  "enabledManagers": ["mise", "github-actions"],
+  // custom.regex is default.json's gh-actions-lock manager.
+  "enabledManagers": ["mise", "github-actions", "custom.regex"],
   "packageRules": [
     // mise writes versions without the "v" that GitHub tags carry.
     {

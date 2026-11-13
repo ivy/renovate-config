@@ -23,7 +23,7 @@ If a repository's checks pass, the update merges, whatever kind of update it is.
 
 ## Checks
 
-`hk check --all` validates `default.json` and this repository's `renovate.json5` with `renovate-config-validator --strict`, which fails on an unknown or deprecated option, and lints the workflows with [jactionlint](https://github.com/jdx/jactionlint). The Check workflow runs it on every push and pull request. Renovate keeps the validator in `mise.toml` current, so a release that changes the config schema fails here before it reaches the repositories that extend this preset. `default.json` is JSONC: Renovate allows comments in it, and it must keep that name, because it is the only file `github>ivy/renovate-config` loads.
+`hk check --all` validates `default.json` and this repository's `renovate.json5` with `renovate-config-validator --strict`, which fails on an unknown or deprecated option, and lints the workflows with [jactionlint](https://github.com/jdx/jactionlint). The Check workflow runs it on every push and pull request, and the actions-lock workflow runs `gh actions-lock --verify` to fail when `.github/workflows/actions.lock` no longer matches the workflows. Renovate keeps the validator in `mise.toml` current, so a release that changes the config schema fails here before it reaches the repositories that extend this preset. `default.json` is JSONC: Renovate allows comments in it, and it must keep that name, because it is the only file `github>ivy/renovate-config` loads.
 
 ## Adding an exception
 
