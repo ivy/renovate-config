@@ -32,7 +32,7 @@
   // https://docs.renovatebot.com/configuration-options/#timezone
   "timezone": "America/Los_Angeles",
 
-  // Renovate runs as a GitHub App (ivy/renovate-runner), so committing through
+  // Renovate runs as a GitHub App (Mend's hosted Renovate), so committing through
   // the API gets its commits signed and verified by GitHub. "auto" does the
   // same under an App; this keeps it from depending on how Renovate is run.
   // https://docs.renovatebot.com/configuration-options/#platformcommit
@@ -59,6 +59,10 @@
   // green, and that keeps almanac/trust able to hold a pull request.
   // https://docs.renovatebot.com/configuration-options/#platformautomerge
   "platformAutomerge": false,
+  // Almanac commits fixes to Renovate's branches. Its commits leave a branch
+  // Renovate's own, so the branch still rebases and automerges.
+  // https://docs.renovatebot.com/configuration-options/#gitignoredauthors
+  "gitIgnoredAuthors": ["almanac[bot]@users.noreply.github.com"],
 
   // Rebase only on conflict. Renovate merges only branches that are up to date,
   // so rebasing whenever a branch falls behind ("auto" does, with automerge on)
