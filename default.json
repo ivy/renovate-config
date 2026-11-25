@@ -120,10 +120,10 @@
 
   "packageRules": [
     {
-      "description": "Hold a release for three days, so a malicious one can be found and pulled first. Only these datasources and update types carry a release timestamp, and one without it would wait for ever.",
+      "description": "Hold a release for three days, so a malicious one can be found and pulled first. A datasource or update type with no release timestamp must stay out of this rule: it would wait for ever.",
       // Three days: docs/research/dependency-cooldowns.md
       // https://docs.renovatebot.com/configuration-options/#minimumreleaseage
-      "matchDatasources": ["npm", "go", "github-tags", "github-releases"],
+      "matchDatasources": ["npm", "go", "github-tags", "github-releases", "node-version"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "minimumReleaseAge": "3 days"
     }
