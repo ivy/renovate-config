@@ -64,13 +64,14 @@
   // https://docs.renovatebot.com/configuration-options/#gitignoredauthors
   "gitIgnoredAuthors": ["almanac[bot]@users.noreply.github.com"],
 
-  // Rebase only on conflict. Renovate merges only branches that are up to date,
-  // so rebasing whenever a branch falls behind ("auto" does, with automerge on)
-  // re-runs CI on every open pull request after each merge and pushes each merge
-  // back a Renovate run. The cost: two updates can merge without having been
-  // tested together, which Renovate warns about.
+  // Rebase a branch whenever it falls behind its base, so an update merges only
+  // on checks that ran against the base it merges into. Renovate's pull-request
+  // automerge refuses a conflicted branch, not one that is merely behind, so
+  // with rebasing only on conflict a branch tested hours earlier merged on
+  // those results. The cost: every merge re-runs CI on each open update, and
+  // each merge waits one more Renovate run.
   // https://docs.renovatebot.com/configuration-options/#rebasewhen
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "behind-base-branch",
 
   // Marks Renovate's pull requests so they can be filtered.
   // https://docs.renovatebot.com/configuration-options/#labels
