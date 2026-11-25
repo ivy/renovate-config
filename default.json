@@ -22,7 +22,7 @@
     ":semanticCommits",
     // config:recommended opens a dashboard issue in every repository. A
     // repository that wants to see updates the cooldown is holding turns it
-    // back on with `"dependencyDashboard": true`.
+    // back on with `"dependencyDashboard": { "enabled": true }`.
     // https://docs.renovatebot.com/key-concepts/dashboard/
     ":disableDependencyDashboard"
   ],
