@@ -27,4 +27,6 @@ If a repository's checks pass, the update merges, whatever kind of update it is.
 
 ## Adding an exception
 
-An exception belongs in the repository it applies to, with a comment saying why. It is justified by a fact a check cannot cover: a tool that only runs in a job pull requests never reach, a change that is a judgment, a planned migration, or a merge that would not stick. "It is a major version" is not one of these. That is what tests are for.
+An exception belongs in the repository it applies to, beside the setting, with a comment naming the fact behind it and what would lift it. It is justified by a fact outside the repository that no check can observe: a service that accepts only certain versions of a client, or a forge copy that another system overwrites, so a merge there would not stick.
+
+A major version, a tool that pull requests never run, a change that takes judgment, and a move to a new operating-system release are not exceptions. Each one is a gap in the repository's checks, and the answer is a check that covers it, not a person who reviews the update.
